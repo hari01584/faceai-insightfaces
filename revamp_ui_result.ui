@@ -100,7 +100,7 @@
             <child>
               <object class="ttk.Frame" id="frame2">
                 <property name="height">200</property>
-                <property name="width">300</property>
+                <property name="width">320</property>
                 <layout manager="pack">
                   <property name="expand">true</property>
                   <property name="fill">both</property>
@@ -151,7 +151,7 @@
                         <property name="text" translatable="yes">Result</property>
                         <property name="tree_column">false</property>
                         <property name="visible">true</property>
-                        <property name="width">150</property>
+                        <property name="width">170</property>
                       </object>
                     </child>
                     <child>
