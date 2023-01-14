@@ -4,7 +4,6 @@
     <property name="height">200</property>
     <property name="padx">20</property>
     <property name="pady">20</property>
-    <property name="resizable">none</property>
     <property name="width">200</property>
     <child>
       <object class="ttk.Frame" id="frame5">
@@ -46,6 +45,12 @@
           <property name="fill">both</property>
           <property name="side">top</property>
         </layout>
+        <containerlayout manager="grid">
+          <property name="anchor">center</property>
+          <property type="col" id="0" name="weight">1</property>
+          <property type="col" id="3" name="weight">1</property>
+          <property type="row" id="2" name="weight">1</property>
+        </containerlayout>
         <child>
           <object class="ttk.Button" id="button1">
             <property name="command" type="command" cbtype="simple">btn_click_subject</property>
@@ -59,10 +64,12 @@ Click To Select
 
 </property>
             <property name="width">30</property>
+            <bind sequence="&lt;Configure&gt;" handler="btn_subj_conf" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">8</property>
               <property name="row">2</property>
+              <property name="sticky">nsew</property>
             </layout>
           </object>
         </child>
@@ -79,10 +86,12 @@ Click to select
 
 </property>
             <property name="width">30</property>
+            <bind sequence="&lt;Configure&gt;" handler="btn_target_conf" add="" />
             <layout manager="grid">
               <property name="column">3</property>
               <property name="padx">8</property>
               <property name="row">2</property>
+              <property name="sticky">nsew</property>
             </layout>
           </object>
         </child>

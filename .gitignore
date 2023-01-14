@@ -2,6 +2,7 @@ target.jpg
 models/
 models-reserve/
 photo_real/
+InsightFace-REST/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -65,11 +65,23 @@ class ArcFaceONNX:
         embedding = self.get_feat(aimg).flatten()
         return embedding
 
-    def compute_sim(self, feat1, feat2):
+    def compute_sim_old(self, feat1, feat2):
         from numpy.linalg import norm
         feat1 = feat1.ravel()
         feat2 = feat2.ravel()
         sim = np.dot(feat1, feat2) / (norm(feat1) * norm(feat2))
+        return sim
+
+    def compute_sim(self, feat1, feat2):
+        from numpy.linalg import norm
+        feat1 = feat1.ravel()
+        feat2 = feat2.ravel()
+        print(feat1)
+        print(feat2)
+        sim = np.dot(feat1, feat2) / (norm(feat1) * norm(feat2))
+        # sim = np.sum(np.square(norm(feat1) - norm(feat2)))
+        # print("Features")
+        # print(feat1)
         return sim
 
     def get_feat(self, imgs):
