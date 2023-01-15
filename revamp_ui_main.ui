@@ -125,10 +125,30 @@ Click to select
         </child>
         <child>
           <object class="ttk.Checkbutton" id="isfoldercheckbutton" named="True">
+            <property name="command" type="command" cbtype="simple">callcheckchange</property>
             <property name="offvalue">File</property>
             <property name="onvalue">Folder</property>
             <property name="state">normal</property>
             <property name="text" translatable="yes">Folder?</property>
+            <layout manager="grid">
+              <property name="column">3</property>
+              <property name="row">4</property>
+              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="label_subj_photo" named="True">
+            <property name="text" translatable="yes">-</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="label_targ_photo" named="True">
+            <property name="text" translatable="yes">-</property>
             <layout manager="grid">
               <property name="column">3</property>
               <property name="row">3</property>

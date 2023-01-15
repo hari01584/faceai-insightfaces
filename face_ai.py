@@ -7,6 +7,8 @@ from scrfd import SCRFD
 import sys
 import json
 from pathlib import Path
+from insightface.app import FaceAnalysis
+import insightface
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -18,6 +20,31 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
+class SFaceAI:
+    def __init__(self):
+        self.app = FaceAnalysis(allowed_modules=['detection', 'recognition', 'genderage'],providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
+        self.app.prepare(ctx_id=0, det_size=(640, 640))
+
+    def __get_from_img(self, img):
+        return self.app.get(img)
+
+    def get(self, imgpath):
+        img = cv2.imread(imgpath)
+        # img = ins_get_image(')
+        
+        return self.__get_from_img(img)
+
+    def preview(self, imgpath):
+        img = cv2.imread(imgpath)
+        faces = self.__get_from_img(img)
+        new_img = self.app.draw_on(img, faces)
+        return new_img, faces
+
+
+    def write_preview(self, imgpath, name):
+        new_img, faces = self.preview(imgpath)
+        cv2.imwrite(name, new_img)
+        return faces
 
 class FaceAI:
     def __init__(self):
