@@ -4,6 +4,8 @@ import pygubu
 from tkinter import CENTER, END, PhotoImage, ttk
 from PIL import ImageTk, Image
 from pathlib import Path
+from face_ai import SFaceAI
+import cv2
 
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "revamp_ui_result.ui"
@@ -23,12 +25,12 @@ class RevampUiResultApp:
 
         builder.connect_callbacks(self)
 
-        print("Is it back?")
+        self.sface_api = SFaceAI()
 
     def run(self):
         self.mainwindow.title('FaceAI')
         self.mainwindow.tk.call("source", "azure.tcl")
-        self.mainwindow.tk.call("set_theme", "dark")
+        self.mainwindow.tk.call("set_theme", "light")
         self.mainwindow.mainloop()
 
     def btn_click_switchtheme(self):
@@ -116,14 +118,21 @@ class RevampUiResultApp:
         self.data.sort(key=lambda x: x[1], reverse=True)
         for row in self.data:
             print(row)
-            _img = Image.open(row[0])
+            # _img = Image.open(row[0])
+            _img, face_data = self.sface_api.preview(row[0])
+            # TODO : Use face_data
             # new_height = 100
             # new_width  = (int)(new_height * float(_img.size[0]) / float(_img.size[1]))
-            new_width = 100
-            new_height = 100
-            _img = _img.resize((new_width, new_height), Image.ANTIALIAS)
+            # new_width = 100
+            # new_height = 100
+            # _img = _img.resize((new_width, new_height), Image.ANTIALIAS)
+            _img = cv2.resize(_img, (100,100))
+            b,g,r = cv2.split(_img)
+            _img = cv2.merge((r,g,b))
 
-            self.image_cache[iid] = ImageTk.PhotoImage(_img)
+            im = Image.fromarray(_img)
+
+            self.image_cache[iid] = ImageTk.PhotoImage(image=im)
 
             row[0] = Path(row[0]).stem
             row[1] = str(round(row[1]*100, 2))  # Convert to %
