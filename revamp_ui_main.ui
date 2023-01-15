@@ -171,5 +171,13 @@ Compare
         </layout>
       </object>
     </child>
+    <child>
+      <object class="ttk.Label" id="label3">
+        <property name="text" translatable="yes">-</property>
+        <layout manager="pack">
+          <property name="side">top</property>
+        </layout>
+      </object>
+    </child>
   </object>
 </interface>

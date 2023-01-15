@@ -3,6 +3,7 @@ models/
 models-reserve/
 photo_real/
 InsightFace-REST/
+photo/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

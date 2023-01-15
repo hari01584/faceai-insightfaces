@@ -23,10 +23,12 @@ class RevampUiResultApp:
 
         builder.connect_callbacks(self)
 
+        print("Is it back?")
+
     def run(self):
         self.mainwindow.title('FaceAI')
         self.mainwindow.tk.call("source", "azure.tcl")
-        self.mainwindow.tk.call("set_theme", "light")
+        self.mainwindow.tk.call("set_theme", "dark")
         self.mainwindow.mainloop()
 
     def btn_click_switchtheme(self):
@@ -36,6 +38,9 @@ class RevampUiResultApp:
         else:
             # Set dark theme
             self.mainwindow.tk.call("set_theme", "dark")
+
+        s = ttk.Style()
+        s.configure("Treeview", rowheight=100)
 
 
     def startProcessing(self, source, targetFile):
@@ -112,8 +117,10 @@ class RevampUiResultApp:
         for row in self.data:
             print(row)
             _img = Image.open(row[0])
+            # new_height = 100
+            # new_width  = (int)(new_height * float(_img.size[0]) / float(_img.size[1]))
+            new_width = 100
             new_height = 100
-            new_width  = (int)(new_height * float(_img.size[0]) / float(_img.size[1]))
             _img = _img.resize((new_width, new_height), Image.ANTIALIAS)
 
             self.image_cache[iid] = ImageTk.PhotoImage(_img)
@@ -127,5 +134,5 @@ class RevampUiResultApp:
 
 if __name__ == "__main__":
     app = RevampUiResultApp()
-    app.startProcessing("/home/hsk/Desktop/Freelance/insightface/photo_real", "/home/hsk/Desktop/Freelance/insightface/target.jpg")
+    app.startProcessing("/home/hsk/Desktop/Freelance/insightface/photo", "/home/hsk/Desktop/Freelance/insightface/target.jpg")
     app.run()
