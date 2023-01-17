@@ -112,3 +112,6 @@ class FaceAI:
             match = 'Highest match'
 
         return sim, conclu, match, json.dumps(data, indent=4)
+
+    def summary(self, data):
+        return "%d%%\n%s\n%s"%(data[0]*100, data[1], data[2])

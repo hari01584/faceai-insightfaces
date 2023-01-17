@@ -22,7 +22,7 @@ class RevampUiResultApp:
         self.treeview = builder.get_object("treeview")
         self.scrollbar_tv = builder.get_object("scrollbar_tv")
         self.technicaldata = builder.get_object("technicaldata")
-
+        
         builder.connect_callbacks(self)
 
         self.sface_api = SFaceAI()

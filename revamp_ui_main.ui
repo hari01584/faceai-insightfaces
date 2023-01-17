@@ -172,7 +172,7 @@ Compare
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="label3">
+      <object class="ttk.Label" id="label_results" named="True">
         <property name="text" translatable="yes">-</property>
         <layout manager="pack">
           <property name="side">top</property>

@@ -8,6 +8,7 @@ from tkinter import messagebox
 from face_ai import resource_path
 from ratelimit import limits, RateLimitException, sleep_and_retry
 from face_ai import SFaceAI
+from face_ai import FaceAI
 
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "revamp_ui_main.ui"
@@ -51,7 +52,10 @@ class RevampUiMainApp:
         self.label_subj_photo = builder.get_object("label_subj_photo")
         self.label_targ_photo = builder.get_object("label_targ_photo")
 
+        self.label_results = builder.get_object("label_results")
+
         self.sface_api = SFaceAI()
+        self.face_api = FaceAI()
 
         builder.connect_callbacks(self)
 
@@ -203,12 +207,22 @@ class RevampUiMainApp:
         if(not self.target_file or (self.is_source_folder and not self.source_folder) or (not self.is_source_folder and not self.source_file)):
             messagebox.showwarning("Input Missing", "Please choose both source and target images!")
             return
+        
 
-        from result_widget import RevampUiResultApp
-        widget = RevampUiResultApp(self.mainwindow)
+        if(self.isfoldercb.instate(['selected'])):
+            from result_widget import RevampUiResultApp
+            widget = RevampUiResultApp(self.mainwindow)
 
-        widget.startProcessing(self.source_file if self.source_file else self.source_folder,self.target_file)
+            widget.startProcessing(self.source_file if self.source_file else self.source_folder,self.target_file)
+        else:
+            # Open accordingly
+            # self.label_results
+            data = self.face_api.func(self.source_file, self.target_file)
 
+            tex = self.face_api.summary(data)
+            self.label_results.config(text=tex)
+
+            face = ""
 
 
 if __name__ == "__main__":

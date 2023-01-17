@@ -15,6 +15,7 @@ a = Analysis(
         ('azure.tcl', '.'),
         ('models', 'models'),
         ('theme', 'theme'),
+        ('assets', 'assets'),
     ],    
     hiddenimports=['PIL', 'PIL._imagingtk', 'PIL._tkinter_finder'],
     hookspath=[],
