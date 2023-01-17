@@ -4,7 +4,8 @@ models-reserve/
 photo_real/
 InsightFace-REST/
 photo/
-
+subject_cache.jpg
+target_cache.jpg
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

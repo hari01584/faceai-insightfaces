@@ -1,4 +1,3 @@
-from arcface_onnx import ArcFaceONNX
 import os
 import os.path as osp
 import cv2
@@ -9,6 +8,7 @@ import json
 from pathlib import Path
 from insightface.app import FaceAnalysis
 import insightface
+import face_align
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -22,7 +22,9 @@ def resource_path(relative_path):
 
 class SFaceAI:
     def __init__(self):
-        self.app = FaceAnalysis(allowed_modules=['detection', 'recognition', 'genderage'],providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
+        # model_pack_name = 'antelopev2'
+        assets_dir = resource_path('')
+        self.app = FaceAnalysis(allowed_modules=['detection', 'recognition', 'genderage'],root=assets_dir, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
         self.app.prepare(ctx_id=0, det_size=(640, 640))
 
     def __get_from_img(self, img):
@@ -33,6 +35,12 @@ class SFaceAI:
         # img = ins_get_image(')
         
         return self.__get_from_img(img)
+
+    def get_cropped(self, img, kps):
+        aimg = face_align.norm_crop(img, landmark=kps, image_size=self.input_size[0])
+        embedding = self.get_feat(aimg).flatten()
+        return embedding
+
 
     def preview(self, imgpath):
         img = cv2.imread(imgpath)
@@ -46,61 +54,74 @@ class SFaceAI:
         cv2.imwrite(name, new_img)
         return faces
 
-class FaceAI:
-    def __init__(self):
-        # assets_dir = osp.expanduser('~/.insightface/models/buffalo_l')
+    def getfeat(self, img):
+        faces = self.app.get(img)
+        if(len(faces) == 0):
+            return None
+        return faces[0]
+    # def compare(self, img1, img2):
 
-        assets_dir = 'models'
-        self.detector = SCRFD(resource_path(os.path.join(assets_dir, 'det_10g.onnx')))
-        self.detector.prepare(0)
-        model_path = resource_path(os.path.join(assets_dir, 'w600k_r50.onnx'))
-        self.rec = ArcFaceONNX(model_path)
-        self.rec.prepare(0)
-
-    def deduce(self, folpath, filepath):
-        from os import listdir
-        from os.path import isfile, join
-        onlyfiles = [f for f in listdir(folpath) if isfile(join(folpath, f))]
-        # Run matching with each files
-        target_file = filepath
-        for file in onlyfiles:
-            match = self.func(target_file, file)
+    def compute_sim(self, feat1, feat2):
+        from numpy.linalg import norm
+        feat1 = feat1.ravel()
+        feat2 = feat2.ravel()
+        sim = np.dot(feat1, feat2) / (norm(feat1) * norm(feat2))
+        return sim
 
 
     def func(self, img1, img2):
+        pimg1 = img1
+        pimg2 = img2
+        img1 = cv2.imread(img1)
+        img2 = cv2.imread(img2)
+
+        feat1 = self.getfeat(img1)
+        feat2 = self.getfeat(img2)
+
         data = {}
 
-        print("Checking ", img1, "and", img2)
-        image1 = cv2.imread(img1)
-        image2 = cv2.imread(img2)
-        bboxes1, kpss1 = self.detector.autodetect(image1, max_num=1)
-        if bboxes1.shape[0]==0:
-            return -1.0, "Face not found in Image-1", "-", json.dumps(data)
-        bboxes2, kpss2 = self.detector.autodetect(image2, max_num=1)
-        if bboxes2.shape[0]==0:
-            return -1.0, "Face not found in Image-2", "-", json.dumps(data)
-        kps1 = kpss1[0]
-        kps2 = kpss2[0]
-        feat1 = self.rec.get(image1, kps1)
-        feat2 = self.rec.get(image2, kps2)
-        # Dump data for technical details
-        data["person1"] = {
-            "name": Path(img2).stem,
-            "box": bboxes2.tolist()
-        }
-        data["person2"] = {
-            "name": Path(img1).stem,
-            "box": bboxes1.tolist()
-        }
-        print(json.dumps(data))
-        sim = self.rec.compute_sim(feat1, feat2)
-        if sim<0.2:
-            conclu = 'They are NOT the same person'
-        elif sim>=0.2 and sim<0.28:
-            conclu = 'They are LIKELY TO be the same person'
-        else:
-            conclu = 'They ARE the same person'
+        if(not feat1 or not feat2):
+            # sim, gage, match, json.dumps(data, indent=4), feat2
+            return -1, '-', 'Invalid, No face', json.dumps(data, indent=4), None
 
+        # print(feat1)
+        bbox1 = feat1.bbox
+        kps1 = feat1.kps
+        detect1 = feat1.det_score
+        gender1 = feat1.gender
+        age1 = feat1.age
+        embedding1 = feat1.embedding
+
+        # Store data to json
+        data["person1"] = {
+            "name": Path(pimg1).stem,
+            "box": bbox1.tolist(),
+            "detect_score": str(detect1),
+            "gender": str(gender1),
+            "age": str(age1)
+        }
+
+        bbox2 = feat2.bbox
+        kps2 = feat2.kps
+        detect2 = feat2.det_score
+        gender2 = feat2.gender
+        age2 = feat2.age
+        embedding2 = feat2.embedding
+
+        data["person2"] = {
+            "name": Path(pimg2).stem,
+            "box": bbox2.tolist(),
+            "detect_score": str(detect2),
+            "gender": str(gender2),
+            "age": str(age2)
+        }
+
+        # Similiarly get detection scores for P2
+
+        # Calculate matching/recognition, arcosine loss
+        sim = self.compute_sim(feat1.embedding, feat2.embedding)
+
+        # More stats
         match = "-"
         if(sim < 0.7):
             match = '-'
@@ -108,10 +129,12 @@ class FaceAI:
             match = 'Low match'
         elif(sim < 0.9):
             match = 'High match'
-        elif(sim <= 1):
+        elif(sim <= 1.1):
             match = 'Highest match'
+        
+        gage = ('M' if gender2 == 1 else 'F') +" "+str(age2)
+        return sim, gage, match, json.dumps(data, indent=4), feat2
 
-        return sim, conclu, match, json.dumps(data, indent=4)
 
     def summary(self, data):
         return "%d%%\n%s\n%s"%(data[0]*100, data[1], data[2])

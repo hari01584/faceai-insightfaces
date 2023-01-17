@@ -50,8 +50,8 @@ class RevampUiResultApp:
 
     def _startProcessing(self, source, targetFile):
         self.mainwindow.update_idletasks()
-        from face_ai import FaceAI
-        fapi = FaceAI()
+        from face_ai import SFaceAI
+        fapi = SFaceAI()
 
         from tkinter import messagebox
         from os import listdir, path, walk
@@ -119,7 +119,13 @@ class RevampUiResultApp:
         for row in self.data:
             print(row)
             # _img = Image.open(row[0])
-            _img, face_data = self.sface_api.preview(row[0])
+            # _img, face_data = self.sface_api.preview(row[0])
+            _face = row[5]
+            _img = cv2.imread(row[0])
+            if(_face):
+                # print("Here face")
+                print(_face)
+                _img = self.sface_api.app.draw_on(_img, [_face])
             # TODO : Use face_data
             # new_height = 100
             # new_width  = (int)(new_height * float(_img.size[0]) / float(_img.size[1]))
