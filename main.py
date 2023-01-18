@@ -8,6 +8,7 @@ from tkinter import messagebox
 from face_ai import resource_path
 from ratelimit import limits, RateLimitException, sleep_and_retry
 from face_ai import SFaceAI
+from sklearn.metrics.pairwise import pairwise_distances
 
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "revamp_ui_main.ui"

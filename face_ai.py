@@ -22,9 +22,9 @@ def resource_path(relative_path):
 
 class SFaceAI:
     def __init__(self):
-        # model_pack_name = 'antelopev2'
+        model_pack_name = 'antelopev2'
         assets_dir = resource_path('')
-        self.app = FaceAnalysis(allowed_modules=['detection', 'recognition', 'genderage'],root=assets_dir, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
+        self.app = FaceAnalysis(name=model_pack_name, allowed_modules=['detection', 'recognition', 'genderage'],root=assets_dir, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
         self.app.prepare(ctx_id=0, det_size=(640, 640))
 
     def __get_from_img(self, img):

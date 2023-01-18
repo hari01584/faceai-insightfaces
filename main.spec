@@ -17,7 +17,7 @@ a = Analysis(
         ('theme', 'theme'),
         ('assets', 'assets'),
     ],    
-    hiddenimports=['PIL', 'PIL._imagingtk', 'PIL._tkinter_finder'],
+    hiddenimports=['PIL', 'PIL._imagingtk', 'PIL._tkinter_finder', 'sklearn.utils._cython_blas'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
