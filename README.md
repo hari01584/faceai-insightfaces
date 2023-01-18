@@ -6,7 +6,7 @@
 - Metrics - Technical Data
 
 ## Prerequisite
-Download _det_10g.onnx_ and _w600k_r50.onnx_ model and place it into a new folder called models, excluded due to their size.
+Just execute, all the models will be downloaded runtime!
 
 ## Installation
 Clone this repository and run
