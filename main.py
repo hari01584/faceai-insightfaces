@@ -86,7 +86,7 @@ class RevampUiMainApp:
             self.mainwindow.tk.call("set_theme", "dark")
 
     # @on_exception(expo, RateLimitException, max_tries=8)
-    @limits(calls=1, period=0.5, raise_on_limit=False)
+    # @limits(calls=1, period=2, raise_on_limit=False)
     def btn_subj_conf(self, event=None):
         if(not event): return
         if(not self.subject_file_cache): return
@@ -100,7 +100,7 @@ class RevampUiMainApp:
         self.click_select_img.config(image=self.subject_photo)
 
 
-    @limits(calls=1, period=0.5, raise_on_limit=False)
+    # @limits(calls=1, period=2, raise_on_limit=False)
     def btn_target_conf(self, event=None):
         if(not event): return
         if(not self.target_file_cache): return
