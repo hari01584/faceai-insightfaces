@@ -1,1 +1,6 @@
 pygubu
+opencv-python
+onnxruntime
+pyinstaller
+insightface
+ratelimit

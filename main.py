@@ -9,6 +9,7 @@ from face_ai import resource_path
 from ratelimit import limits, RateLimitException, sleep_and_retry
 from face_ai import SFaceAI
 from sklearn.metrics.pairwise import pairwise_distances
+import time
 
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "revamp_ui_main.ui"
@@ -56,6 +57,11 @@ class RevampUiMainApp:
 
         self.sface_api = SFaceAI()
 
+        # Define callbacks timeout
+        self.last_subject_update_time = time.time()
+        self.last_target_update_time = time.time()
+
+
         builder.connect_callbacks(self)
 
     def run(self):
@@ -85,35 +91,46 @@ class RevampUiMainApp:
             # Set dark theme
             self.mainwindow.tk.call("set_theme", "dark")
 
+
     # @on_exception(expo, RateLimitException, max_tries=8)
-    @limits(calls=1, period=2, raise_on_limit=False)
+    # @limits(calls=1, period=2, raise_on_limit=False)
     def btn_subj_conf(self, event=None):
         if(not event): return
         if(not self.subject_file_cache): return
-        w = event.width
-        h = event.height
-        print("Call")
-        # Set picture
-        resized_image = resizeOps(self.subject_file_cache, min(w, h))
 
-        self.subject_photo=ImageTk.PhotoImage(resized_image)
-        self.click_select_img.config(image=self.subject_photo)
+        cur_time = time.time()
+        if (cur_time - self.last_subject_update_time) > 0.5:
+            w = event.width
+            h = event.height
+            print("Call")
+            # Set picture
+            # resized_image = resizeOps(self.subject_file_cache, min(w, h))
+
+            # self.subject_photo=ImageTk.PhotoImage(resized_image)
+            # self.click_select_img.config(image=self.subject_photo)
+        else:
+            pass
+        self.last_subject_update_time = cur_time
 
 
-    @limits(calls=1, period=2, raise_on_limit=False)
+    # @limits(calls=1, period=2, raise_on_limit=False)
     def btn_target_conf(self, event=None):
         if(not event): return
         if(not self.target_file_cache): return
         if(self.isfoldercb.instate(['selected'])): return
 
-        w = event.width
-        h = event.height
-        print("Call")
-        # Set picture
-        resized_image = resizeOps(self.target_file_cache, min(w, h))
+        cur_time = time.time()
+        if (cur_time - self.last_target_update_time) > 0.5:
+            w = event.width
+            h = event.height
+            print("Call")
+            # Set picture
+            # resized_image = resizeOps(self.target_file_cache, min(w, h))
 
-        self.target_photo=ImageTk.PhotoImage(resized_image)
-        self.target_select_img.config(image=self.target_photo)
+            # self.target_photo=ImageTk.PhotoImage(resized_image)
+            # self.target_select_img.config(image=self.target_photo)
+        
+        self.last_target_update_time = cur_time
 
 
     def callcheckchange(self):
