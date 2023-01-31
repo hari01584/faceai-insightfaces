@@ -1,9 +1,20 @@
 # FaceAI
-## M1-R2
+FaceAI is image recognition, detection program with age & gender predictions! Based upon leading CVPR 2019 accepted Arcface algorithm (on insightface library)
 
+## Progress
+- Compare target photo with multiple photos from source.
 - Compare target photo from set of photos in folder or a specific file!
 - Progressbar/UI - Better
 - Metrics - Technical Data
+- Dark/Light Mode
+
+## Demo
+<img src="demo/01.png" width="400">
+<img src="demo/02.png" width="400">
+<img src="demo/03.png" width="400">
+<img src="demo/04.png" width="400">
+![output](demo/04.png)
+
 
 ## Prerequisite
 Just execute, all the models will be downloaded runtime!
