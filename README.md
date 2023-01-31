@@ -11,10 +11,10 @@ FaceAI is image recognition, detection program with age & gender predictions! Ba
 ## Demo
 ![flowblade](https://user-images.githubusercontent.com/31770598/215880508-03a72c52-c40d-46c5-894d-d701b8d64d3a.gif)
 
-<img src="demo/01.png" width="400"/>
-<img src="demo/02.png" width="400"/>
-<img src="demo/03.png" width="400"/>
-<img src="demo/04.png" width="400"/>
+<img src="demo/01.png" width="300"/>
+<img src="demo/02.png" width="300"/>
+<img src="demo/03.png" width="300"/>
+<img src="demo/04.png" width="300"/>
 
 ## Prerequisite
 Just execute, all the models will be downloaded runtime!
