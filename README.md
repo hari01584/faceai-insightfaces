@@ -13,7 +13,6 @@ FaceAI is image recognition, detection program with age & gender predictions! Ba
 <img src="demo/01.png" width="250"/>
 <img src="demo/02.png" width="250"/>
 <img src="demo/03.png" width="250"/>
-<img src="demo/04.png" width="250"/>
 
 ## Prerequisite
 Just execute, all the models will be downloaded runtime!
