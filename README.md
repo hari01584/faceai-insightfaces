@@ -9,7 +9,7 @@ FaceAI is image recognition, detection program with age & gender predictions! Ba
 - Dark/Light Mode
 
 ## Demo
-![flowblade](https://user-images.githubusercontent.com/31770598/215880508-03a72c52-c40d-46c5-894d-d701b8d64d3a.gif)
+![flowblade](https://user-images.githubusercontent.com/31770598/215880508-03a72c52-c40d-46c5-894d-d701b8d64d3a.gif)<br>
 <img src="demo/01.png" width="200"/>
 <img src="demo/02.png" width="200"/>
 <img src="demo/03.png" width="200"/>
